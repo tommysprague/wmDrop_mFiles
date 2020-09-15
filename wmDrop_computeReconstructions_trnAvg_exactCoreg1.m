@@ -1,4 +1,4 @@
-function wmDrop_computeReconstructions_trnAvg_exactCoreg1(subj, VOIs,hex_size)
+function wmDrop_computeReconstructions_trnAvg_exactCoreg1(subj, VOIs,hex_size,res)
 % computes reconstructions exactly aligned to target position (aligned
 % position is 3.5, 0 dva (x,y)). These are used for Figs. 7-8, S8.
 

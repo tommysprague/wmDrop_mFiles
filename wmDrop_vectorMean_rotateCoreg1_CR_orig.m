@@ -1,4 +1,4 @@
-function wmDrop_vectorMean_rotateCoreg1_CR(subj,VOIs,tpts_of_interest, hex_size)
+function wmDrop_vectorMean_rotateCoreg1_CR_orig(subj,VOIs,tpts_of_interest, hex_size)
 %
 % TCS 6/23/2015
 % updated 8/15/2015 to plot comparison between represntational fidelity
@@ -165,17 +165,10 @@ myx = (myt.'/(2*pi)) * 2*pi*mean(gridr);
 
 % generate set of resampled trials (let's use the same set of indices for
 % each condition, ROI, etc...)
-n_trials        = sum(all_conds(:,2)==1 & all_vois==1 & all_tpts==tpts_of_interest(1));
-n_samples_delay = sum(all_conds(:,2)==1 & all_vois==1 & ismember(all_tpts,delay_tpts{1}));
-resample_idx       = nan(n_resample_iter,n_trials);
-resample_idx_delay = nan(n_resample_iter,n_samples_delay);
+n_trials = sum(all_conds(:,2)==1 & all_vois==1 & all_tpts==tpts_of_interest(1));
+resample_idx = nan(n_resample_iter,n_trials);
 for ii = 1:n_resample_iter
-    resample_idx(ii,:)       = randsample(1:n_trials,n_trials,'true');
-end
-
-% we do these in successive loops to ensure original results remain unchanged
-for ii = 1:n_resample_iter
-    resample_idx_delay(ii,:) = randsample(1:n_samples_delay,n_samples_delay,'true');
+    resample_idx(ii,:) = randsample(1:n_trials,n_trials,'true');
 end
 
 subj_str = sprintf('ALLn%i',length(u_subj));
@@ -235,7 +228,7 @@ for vv = 1:length(VOIs)
             
             
             for ii = 1:n_resample_iter
-                recons_to_fit(:,ii) = mean(all_recons_avgr(thisidx(resample_idx_delay(ii,:)),:),1)';
+                recons_to_fit(:,ii) = mean(all_recons_avgr(thisidx(resample_idx(ii,:)),:),1)';
             end
             
             
@@ -330,7 +323,7 @@ else
 end
 
 if save_stats == 1
-    fn_stats = sprintf('%swmDrop_stats/n%i_vectorMean_thruTime_%sthru%s_%s_%s.mat',root,length(u_subj),VOIs{1},VOIs{end},recon_str,datestr(now,30));
+    fn_stats = sprintf('%swmDrop_stats/n%i_vectorMean_thruTimeOrig_%sthru%s_%s_%s.mat',root,length(u_subj),VOIs{1},VOIs{end},recon_str,datestr(now,30));
     fprintf('saving stats to %s...\n',fn_stats);
     save(fn_stats,'mythresh','mythresh_delay','mythresh_delay_compare','allp','allp_delay','allp_delay_compare','tpts_of_interest','VOIs','condstr','n_resample_iter','rand_seed','delay_tpts');
 end
@@ -468,7 +461,7 @@ if length(VOIs) > 1
     end
     
     
-    fprintf('Compare between ROIs\n');
+    
     
     thisp_diffm =cell(3,1);
     fdr_diffs = nan(3,1);
@@ -553,7 +546,7 @@ if length(VOIs) > 1
 
     
     if save_stats == 1
-        fn_stats = sprintf('%swmDrop_stats/n%i_vectorMean_diffs_%sthru%s_%s_%s.mat',root,length(u_subj),VOIs{1},VOIs{end},recon_str,datestr(now,30));
+        fn_stats = sprintf('%swmDrop_stats/n%i_vectorMean_diffsOrig_%sthru%s_%s_%s.mat',root,length(u_subj),VOIs{1},VOIs{end},recon_str,datestr(now,30));
         fprintf('saving stats to %s...\n',fn_stats);
         save(fn_stats,'fdr_diffs','thisp_diffm','VOIs','n_resample_iter','rand_seed','delay_tpts');%,'mythresh_delay_compare','allp','allp_delay','allp_delay_compare','tpts_of_interest','VOIs','condstr','n_resample_iter','rand_seed','delay_tpts');
     end
@@ -569,9 +562,6 @@ end
 all_difft = cell(length(VOIs),3); % these are the images we'll plot
 allp_difft =cell(length(VOIs),3); % and corresponding p-values
 fdr_difft = nan(3,1);
-
-fprintf('Compare timepoints within condition & ROI\n');
-
 figure; axt = nan(length(VOIs),3);
 for cc = 1:3
     for vv = 1:length(VOIs)
@@ -674,11 +664,10 @@ cc = cell2mat({tmpclim{:}});
 set(axt,'CLim',[-1 1]*max(abs(cc(:))),'XLim',[0.5 length(tpts_of_interest)+0.5],'YLim',[0.5 length(tpts_of_interest)+0.5])
 
 if save_stats == 1
-    fn_stats = sprintf('%swmDrop_stats/n%i_vectorMean_timeCourseDiffs_%sthru%s_%s_%s.mat',root,length(u_subj),VOIs{1},VOIs{end},recon_str,datestr(now,30));
+    fn_stats = sprintf('%swmDrop_stats/n%i_vectorMean_timeCourseDiffsOrig_%sthru%s_%s_%s.mat',root,length(u_subj),VOIs{1},VOIs{end},recon_str,datestr(now,30));
     fprintf('saving stats to %s...\n',fn_stats);
     save(fn_stats,'fdr_difft','fdr_difft_all','allp_difft','VOIs','n_resample_iter','rand_seed','delay_tpts');%,'mythresh_delay_compare','allp','allp_delay','allp_delay_compare','tpts_of_interest','VOIs','condstr','n_resample_iter','rand_seed','delay_tpts');
     %save(fn_stats,'fdr_difft','fdr_difft_all','allp_difft','allp_delay','allp_delay_compare','mythresh','mythresh_delay','mythresh_delay_compare','VOIs','n_resample_iter','rand_seed','delay_tpts');%,'mythresh_delay_compare','allp','allp_delay','allp_delay_compare','tpts_of_interest','VOIs','condstr','n_resample_iter','rand_seed','delay_tpts');
-
 end
 
 

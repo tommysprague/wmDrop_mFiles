@@ -83,7 +83,8 @@ for ss = 1:size(subj,2)   % loop over subjects
             fprintf('generating design matrix\n');
             
             % load this subject's stimulus parameter file
-            fn = sprintf('%s%s_%s_params.mat',root,subj{ss},trnPrefix);
+            % TCS update 9/12/2020 - _params.mat files live in subfolder
+            fn = sprintf('%s/wmDrop_params/%s_%s_params.mat',root,subj{ss},trnPrefix);
             fprintf('loading stimulus parameters from : %s\n',fn);
             load(fn); clear fn;
             

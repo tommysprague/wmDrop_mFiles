@@ -6,5 +6,8 @@ function myroot = load_root
 % for NC, original directory: myroot =
 % '/usr/local/serenceslab/tommy/wmDrop/';
 %myroot = '/mnt/neurocube/local/serenceslab/tommy/wmDrop_OSF/';
-myroot = '/Volumes/tommy/Documents/MATLAB/wmDrop_OSF/';
+%myroot = '/Volumes/tommy/Documents/MATLAB/wmDrop_OSF/';
+
+myroot = '/home/local/PSYCH-ADS/sprague/labshare/projects/ucsd/wmDrop/';
+
 return

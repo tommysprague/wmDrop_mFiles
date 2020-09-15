@@ -5,7 +5,7 @@
 % are run
 
 
-addpath(genpath([load_root 'mFiles']));
+%addpath(genpath([load_root 'mFiles']));
 
 
 subj = {'AI81','AI82','AI83','AP81','AP82','AP83','AL81','AL82','AL83','AR81','AR82','AR83','AS81','AS82','AS83','BC81','BC82','BC83'};
@@ -16,7 +16,8 @@ delay_tpts = {[3 4],[7 8]}; % TRs after trial start (0 = volume nearest targets)
 
 all_tpts = 0:9; % for time-series analyses
 
-reconstruction_resolution = 51;
+%reconstruction_resolution = 51;
+reconstruction_resolution = 101;
 
 %% behavioral analyses
 
@@ -78,11 +79,12 @@ wmDrop_computeReconstructions_rotateCoreg1(subj,VOIs,hex_size)
 
 % we also need to resample across trials for plotting 1-d reconstructions
 % with CIs (Fig. 6)
-wmDrop_resampleReconstructions_rotateCoreg1(subj,VOIs,hex_size);
+% TCS 9/12/2020 - this correctly resamples
+wmDrop_resampleReconstructions_rotateCoreg1(subj,VOIs,delay_tpts,hex_size); % TCS - added delay_tpts arg
 
 
 % this computes reconstructions used for surface fitting (Figs. 7-8, S8)
-wmDrop_computeReconstructions_exactCoreg1(subj,VOIs,hex_size,reconstruction_resolution);
+wmDrop_computeReconstructions_trnAvg_exactCoreg1(subj,VOIs,hex_size,reconstruction_resolution);
 
 
 
@@ -116,6 +118,7 @@ wmDrop_plotReconstructions_rotateCoreg1_resample(6,VOIs,delay_tpts,hex_size);
 % trials loaded in order; if the trials are loaded in a different order, a
 % different set of trials will be grouped during each randomization
 % iteration).
+% TCS 9/12/2020: seems likely this is only using n = 3 for delay-period stats
 wmDrop_vectorMean_rotateCoreg1_CR;
 
 
@@ -151,4 +154,5 @@ wmDrop_plotFits_trnAvg_exactCoreg_byRecallError1_resamp(6,{'SuperWMDrop'},delay_
 
 % Fig. S8:
 wmDrop_plotFits_trnAvg_exactCoreg_byRecallError1_resamp(6,{'V1','V2','V3','V3A','V4','IPS0','IPS1','IPS2','IPS3','sPCS'},delay_tpts,hex_size);
+
 
